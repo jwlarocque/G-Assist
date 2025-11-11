@@ -1,0 +1,4 @@
+{
+    "homeassistant_mcp_url": "http://localhost:8123/api/mcp",
+    "homeassistant_access_token": "<your_access_token_here>"
+}
