@@ -1,0 +1,14 @@
+{
+  "manifestVersion": 1,
+  "executable": "./time-plugin.exe",
+  "persistent": true,
+  "passthrough": false,
+  "functions": [
+    {
+      "name": "get_time",
+      "description": "Fetches the current local date and time.",
+      "tags": ["time", "date"],
+      "properties": {}
+    }
+  ]
+}
