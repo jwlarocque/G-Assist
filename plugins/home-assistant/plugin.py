@@ -73,6 +73,7 @@ def eval_param(func, property, param):
     return param
 
 def initialize():
+    logging.info("initializing...")
     global config
     global manifest
     with open("config.json") as f:
@@ -88,6 +89,7 @@ def initialize():
         return {"success": False, "message": str(e)}
     with open("manifest.json") as f:
         manifest = json.load(f)
+    logging.info("initialized.")
     return {"success": True, "message": "Plugin initialized"}
 
 async def call_tool_async(func: str, params: dict) -> dict:
@@ -106,80 +108,13 @@ async def call_tool_async(func: str, params: dict) -> dict:
             return response.content[0].text
 
 def call_tool(func: str, params: dict) -> dict:
+    logging.info(f"Calling tool: {func} with params: {params}")
     try:
         result = asyncio.run(call_tool_async(func, params))
         return {"success": True, "message": str(result)}
     except Exception as e:
         logging.error(f"Error calling tool: {e}")
         return {"success": False, "message": str(e)}
-
-def get_weather_info(params: dict = None) -> dict:
-    """
-    Retrieves weather information for a specified city using the wttr.in service.
-    
-    Args:
-        params (dict, optional): Dictionary containing parameters. Must include 'city' key.
-            Example: {"city": "London"}
-        
-    Returns:
-        dict: A dictionary containing:
-            - success (bool): Whether the operation was successful
-            - message (str): Weather information or error message
-            
-    Example:
-        >>> get_weather_info({"city": "London"})
-        {
-            "success": True,
-            "message": "Partly cloudy, 15 degrees Celsius, Humidity: 65%"
-        }
-        
-    Raises:
-        No exceptions are raised. All errors are caught and returned in the response dict.
-    """
-    if not params or "city" not in params:
-        logging.error("City parameter is required in get_weather_info")
-        return {"success": False, "message": "City parameter is required."}
-    
-    city = params["city"]
-    url = f"https://wttr.in/{city}?format=j1"
-    
-    try:
-        response = requests.get(url, timeout=10)  # Add timeout for better reliability
-        if response.status_code == 200:
-            weather_data = response.json()
-            
-            # Extract relevant information from the JSON response
-            current_condition = weather_data.get('current_condition', [{}])[0]
-            temperature = current_condition.get('temp_C', 'N/A')
-            condition = current_condition.get('weatherDesc', [{'value': 'Unknown'}])[0].get('value', 'Unknown')
-            humidity = current_condition.get('humidity', 'N/A')
-            
-            # Sanitize the condition text
-            condition = ''.join(c for c in condition if c.isprintable() and c.isascii())
-            
-            # Create a human-readable message with sanitized text
-            message = f"{condition}, {temperature} degrees Celsius, Humidity: {humidity}%"
-            
-            logging.info(f"Weather data retrieved successfully for city: {city}")
-            return {
-                "success": True,
-                "message": message
-            }
-        else:
-            logging.error(f"Failed to retrieve weather data for city: {city}. Status code: {response.status_code}")
-            return {"success": False, "message": f"Failed to retrieve weather data. Status code: {response.status_code}"}
-    except requests.Timeout:
-        logging.error(f"Timeout while retrieving weather data for city: {city}")
-        return {"success": False, "message": "Request timed out. Please try again."}
-    except requests.RequestException as e:
-        logging.error(f"Request error while retrieving weather data for city: {city}. Error: {str(e)}")
-        return {"success": False, "message": f"Error retrieving weather data: {str(e)}"}
-    except json.JSONDecodeError as e:
-        logging.error(f"Failed to parse weather data for city: {city}. Error: {str(e)}")
-        return {"success": False, "message": "Failed to parse weather data."}
-    except Exception as e:
-        logging.error(f"Unexpected error while retrieving weather data for city: {city}. Error: {str(e)}")
-        return {"success": False, "message": f"An unexpected error occurred: {str(e)}"}
 
 def main():
     """
@@ -205,12 +140,13 @@ def main():
     """
 
     commands = {
-        'initialize': initialize,
+        'initialize': lambda _: logging.info("hello"),
         'shutdown': lambda _: logging.info("goodbye")
     }
     
     while True:
         command = read_command()
+        logging.info(f"Received command: {command}")
         tool_calls = command.get("tool_calls", [])
         for tool_call in tool_calls:
             func = tool_call.get("func")
@@ -298,6 +234,7 @@ def write_response(response:Response) -> None:
     except Exception as e:
         logging.error(f'Exception in write_response(): {str(e)}')
 
+initialize()
 
 if __name__ == '__main__':
     main()

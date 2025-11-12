@@ -35,6 +35,10 @@ if exist %VENV% (
 		copy /y manifest.json "%HA_DIR%\manifest.json"
 		echo manifest.json copied successfully.
 	)
+	copy /y manifest_template.json "%HA_DIR%\manifest_template.json"
+	echo manifest_template.json copied successfully.
+	copy /y config.json "%HA_DIR%\config.json"
+	echo config.json copied successfully.
 
 	call %VENV%\Scripts\deactivate.bat
 	echo Plugin can be found in the "%HA_DIR%" directory
