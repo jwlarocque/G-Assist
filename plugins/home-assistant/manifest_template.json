@@ -3,6 +3,6 @@
   "executable": "./home-assistant-plugin.exe",
   "persistent": true,
   "passthrough": false,
-  "description": "Control and monitor smart home devices.",
+  "description": "Control and monitor smart home devices. This manifest will be populated dynamically at build time. You should not be able to see this message in the installed plugin's manifest.",
   "functions": []
 }
