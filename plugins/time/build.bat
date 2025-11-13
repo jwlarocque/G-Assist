@@ -18,36 +18,26 @@ set PYTHON=python3
 :build
 set VENV=.venv
 set DIST_DIR=dist
-set HA_DIR=%DIST_DIR%\home-assistant
+set TIME_DIR=%DIST_DIR%\time
 if exist %VENV% (
 	call %VENV%\Scripts\activate.bat
 
-	python init.py
-	IF ERRORLEVEL 1 (
-		echo Failed to run init.py
-		exit /b 1
-	)
+	:: Ensure time subfolder exists
+	if not exist "%TIME_DIR%" mkdir "%TIME_DIR%"
 
-	:: Ensure subfolder exists
-	if not exist "%HA_DIR%" mkdir "%HA_DIR%"
-
-	pyinstaller --onefile --name home-assistant-plugin --distpath "%HA_DIR%" plugin.py
+	pyinstaller --onefile --name time-plugin --distpath "%TIME_DIR%" plugin.py
 	if exist manifest.json (
-		copy /y manifest.json "%HA_DIR%\manifest.json"
+		copy /y manifest.json "%TIME_DIR%\manifest.json"
 		echo manifest.json copied successfully.
 	) else (
 		echo {} > manifest.json
 		echo Created a blank manifest.json file.	
-		copy /y manifest.json "%HA_DIR%\manifest.json"
+		copy /y manifest.json "%TIME_DIR%\manifest.json"
 		echo manifest.json copied successfully.
 	)
-	copy /y manifest_template.json "%HA_DIR%\manifest_template.json"
-	echo manifest_template.json copied successfully.
-	copy /y config.json "%HA_DIR%\config.json"
-	echo config.json copied successfully.
 
 	call %VENV%\Scripts\deactivate.bat
-	echo Plugin can be found in the "%HA_DIR%" directory
+	echo Plugin can be found in the "%TIME_DIR%" directory
 	exit /b 0
 ) else (
 	echo Please run setup.bat before attempting to build
