@@ -1,4 +1,6 @@
 import json
+import logging
+import asyncio
 
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
@@ -70,3 +72,18 @@ async def populate_manifest(url: str, bearer_token: str):
             # write to manifest.json
             with open("manifest.json", "w") as f:
                 json.dump(manifest, f, indent=4)
+
+if __name__ == "__main__":
+    print("running manifest initialization...")
+    with open("config.json") as f:
+        config = json.load(f)
+    if not config.get("homeassistant_access_token", None):
+        print("homeassistant_access_token is missing from config.")
+    if not config.get("homeassistant_mcp_url", None):
+        print("homeassistant_mcp_url is missing from config.")
+    try:
+        asyncio.run(populate_manifest(config["homeassistant_mcp_url"], config["homeassistant_access_token"]))
+    except Exception as e:
+        print(f"Error initializing plugin: {e}")
+        raise
+    print("initialized.")

@@ -22,6 +22,12 @@ set HA_DIR=%DIST_DIR%\home-assistant
 if exist %VENV% (
 	call %VENV%\Scripts\activate.bat
 
+	python init.py
+	IF ERRORLEVEL 1 (
+		echo Failed to run init.py
+		exit /b 1
+	)
+
 	:: Ensure subfolder exists
 	if not exist "%HA_DIR%" mkdir "%HA_DIR%"
 
