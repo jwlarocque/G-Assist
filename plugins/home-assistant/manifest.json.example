@@ -1,7 +1,0 @@
-{
-  "manifestVersion": 1,
-  "executable": "./home-assistant-plugin.exe",
-  "persistent": true,
-  "passthrough": false,
-  "functions": []
-}

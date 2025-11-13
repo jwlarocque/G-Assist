@@ -3,5 +3,262 @@
   "executable": "./home-assistant-plugin.exe",
   "persistent": true,
   "passthrough": false,
-  "functions": []
+  "description": "Control and monitor smart home devices.\n\nThis is a list of available devices, with a domain on each line followed by the names of all devices in that domain. You MUST use only the names of devices found in this list for Hass tool calls. You MAY infer which name the user is referring to from context, if appropriate.\nbinary_sensor: Movement Backyard\nclimate: Ecobee, HeatPump, Hvac\ncover: Garage Door, Hall Window, Kitchen Window, Living Room Window, Pergola Roof\nfan: Ceiling Fan, Living Room Fan, Percentage Full Fan, Percentage Limited Fan, Preset Only Limited Fan\nhumidifier: Dehumidifier, Humidifier, Hygrostat\nlight: Bed Light, Ceiling Lights, Entrance Color + White Lights, Kitchen Lights, Living Room RGBWW Lights, Office RGBW Lights\nmedia_player: Bedroom, Browse, Group, Kitchen, Living Room, Lounge room, Search, Walkman\nsensor: Carbon dioxide, Carbon monoxide, Outside Humidity, Outside Temperature\nswitch: AC, Decorative Lights\ntodo: Shopping List\nvacuum: Demo vacuum 0 ground floor, Demo vacuum 1 first floor, Demo vacuum 2 second floor, Demo vacuum 3 third floor, Demo vacuum 4 fourth floor\nwater_heater: Demo Water Heater, Demo Water Heater Celsius\nweather: Forecast Home",
+  "functions": [
+    {
+      "name": "HassTurnOn",
+      "description": "Turns on/opens/presses a device or entity. For locks, this performs a 'lock' action. Use for requests like 'turn on', 'activate', 'enable', or 'lock'.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "HassTurnOff",
+      "description": "Turns off/closes a device or entity. For locks, this performs an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable', or 'unlock'.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "HassSetPosition",
+      "description": "Sets the position of a device or entity",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        },
+        "position": {
+          "type": "integer",
+          "description": "position (minimum: 0) (maximum: 100)"
+        }
+      }
+    },
+    {
+      "name": "HassCancelAllTimers",
+      "description": "Cancels all timers",
+      "properties": {}
+    },
+    {
+      "name": "HassListAddItem",
+      "description": "Add item to a todo list",
+      "properties": {
+        "item": {
+          "type": "string",
+          "description": "item"
+        },
+        "name": {
+          "type": "string",
+          "description": "the name of the list"
+        }
+      }
+    },
+    {
+      "name": "HassClimateSetTemperature",
+      "description": "Sets the target temperature of a climate device or entity",
+      "properties": {
+        "temperature": {
+          "type": "number",
+          "description": "temperature"
+        },
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "HassFanSetSpeed",
+      "description": "Sets a fan's speed by percentage",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        },
+        "percentage": {
+          "type": "integer",
+          "description": "The speed percentage of the fan (minimum: 0) (maximum: 100)"
+        }
+      }
+    },
+    {
+      "name": "HassHumidifierSetpoint",
+      "description": "Set desired humidity level",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        },
+        "humidity": {
+          "type": "integer",
+          "description": "humidity (minimum: 0) (maximum: 100)"
+        }
+      }
+    },
+    {
+      "name": "HassLightSet",
+      "description": "Sets the brightness percentage or color of a light",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        },
+        "color": {
+          "type": "string",
+          "description": "color (optional)"
+        },
+        "brightness": {
+          "type": "integer",
+          "description": "The brightness percentage of the light between 0 and 100, where 0 is off and 100 is fully lit (minimum: 0) (maximum: 100)"
+        }
+      }
+    },
+    {
+      "name": "HassMediaUnpause",
+      "description": "Resumes a media player",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "HassMediaPause",
+      "description": "Pauses a media player",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "HassMediaNext",
+      "description": "Skips a media player to the next item",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "HassMediaPrevious",
+      "description": "Replays the previous item for a media player",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "HassSetVolume",
+      "description": "Sets the volume percentage of a media player",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        },
+        "volume_level": {
+          "type": "integer",
+          "description": "The volume percentage of the media player (minimum: 0) (maximum: 100)"
+        }
+      }
+    },
+    {
+      "name": "HassSetVolumeRelative",
+      "description": "Increases or decreases the volume of a media player",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        },
+        "volume_step": {
+          "type": "integer",
+          "description": "amount to change the volume"
+        }
+      }
+    },
+    {
+      "name": "HassMediaPlayerMute",
+      "description": "Mutes a media player",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "HassMediaPlayerUnmute",
+      "description": "Unmutes a media player",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "HassMediaSearchAndPlay",
+      "description": "Searches for media and plays the first result",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        },
+        "search_query": {
+          "type": "string",
+          "description": "search_query"
+        }
+      }
+    },
+    {
+      "name": "HassVacuumStart",
+      "description": "Starts a vacuum",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "HassVacuumReturnToBase",
+      "description": "Returns a vacuum to base",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name"
+        }
+      }
+    },
+    {
+      "name": "GetDateTime",
+      "description": "Provides the current date and time.",
+      "properties": {}
+    },
+    {
+      "name": "todo_get_items",
+      "description": "Query a to-do list to find out what items are on it. Use this to answer questions like 'What's on my task list?' or 'Read my grocery list'. Filters items by status (needs_action, completed, all).",
+      "properties": {
+        "todo_list": {
+          "type": "string",
+          "description": "todo_list (must be in enum: ['Shopping List'])"
+        }
+      }
+    },
+    {
+      "name": "GetLiveContext",
+      "description": "Provides real-time information about the CURRENT state, value, or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering questions about current conditions (e.g., 'Is the light on?'). 2. As the first step in conditional actions (e.g., 'If the weather is rainy, turn off sprinklers' requires checking the weather first).",
+      "properties": {}
+    }
+  ]
 }
