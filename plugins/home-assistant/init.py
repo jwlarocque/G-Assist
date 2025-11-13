@@ -6,7 +6,7 @@ from collections import defaultdict
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
 
-from default_tags import DEFAULT_TAGS, ALLOWED_TOOLS
+from manifest_consts import DEFAULT_TAGS, ALLOWED_TOOLS
 
 # converts mcp property object to manifest json, applying overrides
 def format_property(name, prop, overrides=None):
@@ -104,13 +104,11 @@ async def populate_manifest(url: str, bearer_token: str):
 
                 try:
                     formatted_tool = format_tool(tool, allowed_properties)
-                    # if formatted_tool["name"] == "GetLiveContext":
-                    #     live_context = await session.call_tool("GetLiveContext")
-                    #     result = json.loads(live_context.content[0].text)["result"]
-                    #     formatted_tool["description"] += f"\nLast {result}"
                     formatted_tools.append(formatted_tool)
                 except Exception as e:
                     print(f"Warning: Failed to format tool {tool.name}: {e}")
+            
+            formatted_tools.append({"name": "refresh_manifest", "description": "Retrieve new state from Home Assistant and use it to create a new manifest.json. Call this function only if the user requests it.", "properties": {}})
 
             try:
                 with open("manifest_template.json") as f:
@@ -123,7 +121,6 @@ async def populate_manifest(url: str, bearer_token: str):
             live_context = await session.call_tool("GetLiveContext")
             result = json.loads(live_context.content[0].text)["result"]
             manifest["description"] += transform_device_list_string(result)
-            print(manifest["description"])
 
             # write to manifest.json
             with open("manifest.json", "w") as f:

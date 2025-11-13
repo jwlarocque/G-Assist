@@ -110,6 +110,14 @@ def call_tool(func: str, params: dict) -> dict:
     except Exception as e:
         logging.error(f"Error calling tool: {e}")
         return {"success": False, "message": str(e)}
+    
+def refresh_manifest(*args, **kwargs):
+    try:
+        asyncio.run(populate_manifest(config["homeassistant_mcp_url"], config["homeassistant_access_token"]))
+        return {"success": True, "message": "Manifest refreshed successfully. Instruct the user to restart G-Assist to apply changes."}
+    except Exception as e:
+        logging.error(f"Error initializing plugin: {e}")
+        return {"success": False, "message": str(e)}
 
 def main():
     """
@@ -136,7 +144,8 @@ def main():
 
     commands = {
         'initialize': lambda _: logging.info("hello"),
-        'shutdown': lambda _: logging.info("goodbye")
+        'shutdown': lambda _: logging.info("goodbye"),
+        'refresh_manifest': refresh_manifest,
     }
     
     while True:
@@ -147,7 +156,7 @@ def main():
             func = tool_call.get("func")
             params = tool_call.get("params", {})
             if func in commands:
-                response = commands[func](params)
+                response = commands[func]()
             else:
                 response = call_tool(func, params)
             write_response(response)
