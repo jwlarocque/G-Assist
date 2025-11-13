@@ -3,5 +3,6 @@
   "executable": "./home-assistant-plugin.exe",
   "persistent": true,
   "passthrough": false,
+  "description": "Control and monitor smart home devices.",
   "functions": []
 }

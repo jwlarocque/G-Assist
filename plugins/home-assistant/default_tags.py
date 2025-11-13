@@ -103,3 +103,82 @@ DEFAULT_TAGS = {
 "is_device_on"
 ]
 }
+
+
+# This new dictionary defines exactly which tools and properties to include
+# and specifies any description or type overrides.
+ALLOWED_TOOLS = {
+    "HassTurnOn": {
+        "name": {}
+    },
+    "HassTurnOff": {
+        "name": {}
+    },
+    "HassSetPosition": {
+        "name": {},
+        "position": {}
+    },
+    "HassCancelAllTimers": {},
+    "HassListAddItem": {
+        "item": {},
+        "name": {"description": "the name of the list"}
+    },
+    "HassClimateSetTemperature": {
+        "temperature": {},
+        "name": {}
+    },
+    "HassFanSetSpeed": {
+        "name": {},
+        "percentage": {}
+    },
+    "HassHumidifierSetpoint": {
+        "name": {},
+        "humidity": {}
+    },
+    "HassLightSet": {
+        "name": {},
+        "color": {"description": "color (optional)"},
+        "brightness": {}
+    },
+    "HassMediaUnpause": {
+        "name": {}
+    },
+    "HassMediaPause": {
+        "name": {}
+    },
+    "HassMediaNext": {
+        "name": {}
+    },
+    "HassMediaPrevious": {
+        "name": {}
+    },
+    "HassSetVolume": {
+        "name": {},
+        "volume_level": {}
+    },
+    "HassSetVolumeRelative": {
+        "name": {},
+        "volume_step": {"type": "integer", "description": "amount to change the volume"}
+    },
+    "HassMediaPlayerMute": {
+        "name": {}
+    },
+    "HassMediaPlayerUnmute": {
+        "name": {}
+    },
+    "HassMediaSearchAndPlay": {
+        "name": {},
+        "search_query": {}
+    },
+    "HassVacuumStart": {
+        "name": {}
+    },
+    "HassVacuumReturnToBase": {
+        "name": {}
+    },
+    "GetDateTime": {},
+    "todo_get_items": {
+        "todo_list": {}
+    },
+    "GetLiveContext": {}
+}

@@ -78,19 +78,14 @@ def initialize():
     global manifest
     with open("config.json") as f:
         config = json.load(f)
-    if not config.get("homeassistant_access_token", None):
-        return {"success": False, "message": "Bearer token is missing from config."}
-    if not config.get("homeassistant_mcp_url", None):
-        return {"success": False, "message": "URL is missing from config."}
-    try:
-        asyncio.run(populate_manifest(config["homeassistant_mcp_url"], config["homeassistant_access_token"]))
-    except Exception as e:
-        logging.error(f"Error initializing plugin: {e}")
-        return {"success": False, "message": str(e)}
+    # try:
+    #     asyncio.run(populate_manifest(config["homeassistant_mcp_url"], config["homeassistant_access_token"]))
+    # except Exception as e:
+    #     logging.error(f"Error initializing plugin: {e}")
+    #     return {"success": False, "message": str(e)}
     with open("manifest.json") as f:
         manifest = json.load(f)
     logging.info("initialized.")
-    return {"success": True, "message": "Plugin initialized"}
 
 async def call_tool_async(func: str, params: dict) -> dict:
     async with streamablehttp_client(
